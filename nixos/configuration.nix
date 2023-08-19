@@ -32,7 +32,7 @@
   #   enable = true;
   #   enableExtensionPack = true;
   # };
-  users.extraGroups.vboxusers.members = [ "edjubert" ];
+  users.extraGroups.vboxusers.members = [ "alphabril" ];
   virtualisation.docker = {
     enable = true;
     rootless = {
@@ -62,8 +62,8 @@
       # after = [ "graphical-session.target" ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "/home/edjubert/.config/home-manager/scripts/xdg-portal start";
-	ExecStop = "/home/edjubert/.config/home-manager/scripts/xdg-portal stop";
+        ExecStart = "/home/alphabril/.config/home-manager/scripts/xdg-portal start";
+	ExecStop = "/home/alphabril/.config/home-manager/scripts/xdg-portal stop";
         Restart = "on-failure";
         RestartSec = 1;
         TimeoutStopSec = 10;
@@ -99,7 +99,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     # font = "Lat2-Terminus16";
-    keyMap = "colemak";
+    keyMap = "us";
     useXkbConfig = false; # use xkbOptions in tty.
   };
 
@@ -109,7 +109,7 @@
   programs.hyprland.enable = true;
   programs.light.enable = true;
 
-  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+  # services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
 
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1v"
@@ -122,18 +122,18 @@
     package = pkgs.usbmuxd2;
   };
 
-  services.xserver = {
-    displayManager.gdm = {
-      enable = true;
-      wayland = true;
-    };
-    desktopManager.gnome.enable = true;
+  # services.xserver = {
+  #   displayManager.gdm = {
+  #     enable = true;
+  #     wayland = true;
+  #   };
+  #   desktopManager.gnome.enable = true;
 
-    enable = true;
-    layout = "us";
-    xkbOptions = "colemak,caps:escape";
-    videoDrivers = ["nvidia"];
-  };
+  #   enable = true;
+  #   layout = "us";
+  #   xkbOptions = "colemak,caps:escape";
+  #   videoDrivers = ["nvidia"];
+  # };
 
   hardware = {
     # tuxedo-keyboard.enable = true;
@@ -152,17 +152,11 @@
     pulse.enable = true;
   };
 
-  users.users.edjubert = {
+  users.users.alphabril = {
     isNormalUser = true;
-    description = "Edouard";
+    description = "AlphaBril";
     extraGroups = [ "networkmanager" "wheel" "video" "docker" ];
     shell = pkgs.fish;
-  };
-
-  users.users.namoureuse = {
-    isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" ];
-    description = "Namoureuse";
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -179,10 +173,6 @@
     EGL_PLATFORM = "wayland";
     GST_VAAPI_ALL_DRIVERS = "1";
   };
-
-  environment.systemPackages = with pkgs; [
-    neovim
-  ];
 
   environment.gnome.excludePackages = (with pkgs; [
     gnome-photos

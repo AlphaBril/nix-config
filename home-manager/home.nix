@@ -1,8 +1,8 @@
 { config, pkgs, inputs, ... }:
 
 {
-  home.username = "edjubert";
-  home.homeDirectory = "/home/edjubert";
+  home.username = "alphabril";
+  home.homeDirectory = "/home/alphabril";
   home.stateVersion = "23.05"; # Please read the comment before changing.
   home.sessionPath = [
     "$HOME/.local/bin"
@@ -58,7 +58,6 @@
     gnomeExtensions.tray-icons-reloaded
     direnv
     fzf
-    htop
     jq
     ripgrep
   ];
@@ -66,7 +65,6 @@
   fonts.fontconfig.enable = true;
 
   xdg.configFile."alacritty".source = ./config/alacritty;
-  xdg.configFile."gophrland".source = ./config/gophrland;
   xdg.configFile."fish".source = ./config/fish;
   xdg.configFile."rofi".source = ./config/rofi;
   xdg.configFile."lvim".source = ./config/lvim;
@@ -77,8 +75,8 @@
 
   programs.git = {
     enable = true;
-    userName = "edjubert";
-    userEmail = "edouard.jubert@gmail.com";
+    userName = "alphabril";
+    userEmail = "florian.marie.doucet@gmail.com";
   };
 
   programs.waybar = {
@@ -271,18 +269,7 @@
     bind   = $mod        , W     , exec           , firefox
     bind   = $mod        , D     , exec           , rofi -show drun
     bind   = $mod SHIFT  , D     , exec           , rofi -show run
-    bind   = $mod        , Q     , exec           , $lockscreen
-
-    # Gophrland
-    bind   = $mod        , O     , exec           , gophrland monitors focus next
-    bind   = $mod SHIFT  , O     , exec           , gophrland monitors move next
-    bind   = $mod        , S     , exec           , gophrland expose toggle
-    bind   = $mod SHIFT  , S     , exec           , gophrland expose show
-    bind   = $mod        , M     , exec           , gophrland scratchpads toggle slack
-    bind   = $mod SHIFT  , M     , exec           , gophrland scratchpads toggle whatsapp-for-linux
-    bind   = $mod SHIFT  , Return, exec           , gophrland scratchpads toggle term
-    bind   = $mod        , V     , exec           , gophrland scratchpads toggle volume
-    bind   = $mod        , K     , exec           , gophrland fload bring current
+    bind   = $mod        , L     , exec           , $lockscreen
 
     # Hyprland Relative Workspace
     bind   = $mod        , LEFT  , exec           , hyprland-relative-workspace b
@@ -309,8 +296,6 @@
     exec-once = bash $xdg/swww/swwwallpaper.sh -n
     exec-once = swaync
     exec-once = gammastep
-
-    exec-once = gophrland daemon --config $xdg/gophrland/gophrland.yaml
 
     exec-once = tuxedo-control-center
 
