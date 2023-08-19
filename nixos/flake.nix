@@ -3,7 +3,7 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
   };
 
-  outputs = { self, nixpkgs, tuxedo-nixos, ... } @ inputs :
+  outputs = { self, nixpkgs, ... } @ inputs :
   let
     system = "x86_64-linux";
   in {

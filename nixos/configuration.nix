@@ -72,15 +72,6 @@
 
   };
 
-  boot.kernelParams = [
-    "quiet"
-    "tuxedo_keyboard.mode=0"
-    "tuxedo_keyboard.brightness=25"
-    "tuxedo_keyboard.color_left=0x0000ff"
-    "module_blacklist=i915"
-  ];
-
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -122,22 +113,7 @@
     package = pkgs.usbmuxd2;
   };
 
-  # services.xserver = {
-  #   displayManager.gdm = {
-  #     enable = true;
-  #     wayland = true;
-  #   };
-  #   desktopManager.gnome.enable = true;
-
-  #   enable = true;
-  #   layout = "us";
-  #   xkbOptions = "colemak,caps:escape";
-  #   videoDrivers = ["nvidia"];
-  # };
-
   hardware = {
-    # tuxedo-keyboard.enable = true;
-
     nvidia.modesetting.enable = true;
     nvidia.powerManagement.enable = true;
   };
