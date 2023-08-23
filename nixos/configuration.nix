@@ -105,29 +105,8 @@
     enable = true;
     layout = "us";
     xkbOptions = "colemak,caps:escape";
-    videoDrivers = ["nvidia"];
   };
 
-  environment.variables = {
-    GBM_BACKEND = "nvidia-drm";
-    LIBVA_DRIVER_NAME = "nvidia";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-  };
-
-  hardware = {
-    nvidia = {
-      open = false;
-      powerManagement.enable = false;
-      modesetting.enable = true;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-    };
-    opengl.extraPackages = with pkgs; [nvidia-vaapi-driver];
-  };
-
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -162,8 +141,6 @@
     MUTTER_ALLOW_HYBRID_GPUS = "1";
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_WEBRENDER = "1";
-    LIBVA_DRIVER_NAME = "nvidia";
-    VDPAU_DRIVER = "nvidia";
     MOZ_DISABLE_RDD_SANDBOX = "1";
     EGL_PLATFORM = "wayland";
     GST_VAAPI_ALL_DRIVERS = "1";
@@ -172,9 +149,6 @@
   environment.systemPackages = with pkgs; [
     vim
     git
-    vulkan-loader
-    vulkan-validation-layers
-    vulkan-tools
   ];
 
   environment.gnome.excludePackages = (with pkgs; [

@@ -113,10 +113,6 @@
 
     # <==== MONITORS ====>
 
-    monitor=DP-2,2560x1440@60Hz,0x0,1
-    monitor=DP-3,1680x1050@60Hz,2560x0,1
-    monitor=HDMI-A-1, 2560x1440@60Hz,4240x0,1
-
     # <==== GENERAL ====>
 
     general {
@@ -320,13 +316,6 @@
     windowrulev2 = workspace 5, class:^(Slack)$
     windowrulev2 = workspace 6, class:^(discord)$
     windowrulev2 = workspace 7, title:^(Spotify)$
-    workspace = 1, monitor:DP-2
-    workspace = 2, monitor:DP-2
-    workspace = 3, monitor:DP-2
-    workspace = 4, monitor:DP-3
-    workspace = 5, monitor:DP-3
-    workspace = 6, monitor:DP-3
-    workspace = 7, monitor:DP-3
   '';
 
   # Let Home Manager install and manage itself.
