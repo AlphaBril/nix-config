@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ lib, config, pkgs, inputs, ... }:
 
 {
   home.username = "alphabril";
@@ -22,44 +22,42 @@
   };
 
   home.packages = with pkgs; [
+    spotify
+    vscode
+    slack
+    discord
+    chromium
+    dunst
     rofi
     swww
-    deno
-    lazygit
     whitesur-icon-theme
     wlogout
     go
     rustup
     pulsemixer
-    jetbrains.idea-ultimate
-    jetbrains.datagrip
     networkmanagerapplet
-    _1password
-    _1password-gui
     firefox
     killall
+    socat
     nerdfonts
     wl-clipboard
     whatsapp-for-linux
     swaylock-effects
-    libimobiledevice
-    ifuse
     gh
-    git
     (mpv.override {
       scripts = [mpvScripts.mpris];
     })
     alacritty
-    gammastep
     htop
     bat
-    gnomeExtensions.appindicator
     wdisplays
-    gnomeExtensions.tray-icons-reloaded
     direnv
     fzf
     jq
     ripgrep
+    grim
+    slurp
+    swappy
   ];
 
   fonts.fontconfig.enable = true;
@@ -67,16 +65,25 @@
   xdg.configFile."alacritty".source = ./config/alacritty;
   xdg.configFile."fish".source = ./config/fish;
   xdg.configFile."rofi".source = ./config/rofi;
-  xdg.configFile."lvim".source = ./config/lvim;
   xdg.configFile."swaync".source = ./config/swaync;
+  xdg.configFile."swaylock".source = ./config/swaylock;
   xdg.configFile."wlogout".source = ./config/wlogout;
   xdg.configFile."waybar".source = ./config/waybar;
-  xdg.configFile."ideavim".source = ./config/ideavim;
+  xdg.configFile."swww".source = ./config/swww;
 
   programs.git = {
     enable = true;
     userName = "alphabril";
     userEmail = "florian.marie.doucet@gmail.com";
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  programs.fish = {
+    enable = true;
   };
 
   programs.waybar = {
@@ -86,11 +93,8 @@
     });
   };
 
-  home.file = {
-  };
-
   home.sessionVariables = {
-    EDITOR = "nvim";
+    EDITOR = "code";
     TERMINAL = "alacritty";
   };
 
@@ -108,17 +112,20 @@
     env = XDG_SESSION_TYPE,wayland,x11
 
     # <==== MONITORS ====>
-    monitor=eDP-1,2560x1440@165,0x0,1
+
+    monitor=DP-2,2560x1440@60Hz,0x0,1
+    monitor=DP-3,1680x1050@60Hz,2560x0,1
+    monitor=HDMI-A-1, 2560x1440@60Hz,4240x0,1
 
     # <==== GENERAL ====>
 
     general {
-      gaps_in = 10
-      gaps_out = 10
-      border_size = 1
-      col.active_border = rgba(47ffffff) rgba(5cdd96ff) 45deg
-      col.inactive_border = rgba(595959aa)
-
+      # See https://wiki.hyprland.org/Configuring/Variables/ for more
+      gaps_in = 3
+      gaps_out = 8
+      border_size = 2
+      col.active_border = rgba(ca9ee6ff) rgba(f2d5cfff) 45deg
+      col.inactive_border = rgba(b4befecc) rgba(6c7086cc) 45deg
       layout = dwindle
     }
 
@@ -143,42 +150,31 @@
     # <==== DECORATION ====>
     
     decoration {
+      # See https://wiki.hyprland.org/Configuring/Variables/ for more
       rounding = 10
-      # blur = true
-      # blur_size = 3
-      # blur_passes = 5
-      # blur_ignore_opacity = false
-      # blur_new_optimizations = true
-
-      dim_special = 0.5
-      dim_around = 0.2
-
-      drop_shadow = true
-      shadow_range = 4
-      shadow_render_power = 3
-      # shadow_scale = 1.0
-      col.shadow = rgba(ee1a1a1a)
-      col.shadow_inactive = rgba(ee1a1a1a)
-      shadow_offset = [10 10]
-    }
+      multisample_edges = true
+      drop_shadow = false
+      shadow_range = 0
+      shadow_render_power = 0
+      col.shadow = rgba(1a1a1aee)
+  }
 
     # <==== INPUTS ====>
 
     input {
       kb_layout = us
-      kb_variant = colemak
+      kb_variant =
       kb_model =
-      kb_options = caps:escape
+      kb_options =
       kb_rules =
-
       follow_mouse = 1
 
       touchpad {
-        natural_scroll = yes
+          natural_scroll = no
       }
 
-      natural_scroll = yes
-      sensitivity = 0
+      sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+      force_no_accel = 1
     }
 
     gestures {
@@ -194,15 +190,21 @@
     # <==== ANIMATIONS ====>
 
     animations {
+      # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
       enabled = yes
-      bezier = myBezier, 0.05, 0.9, 0.1, 1.05
-
-      animation = windows, 1, 7, myBezier
-      animation = windowsOut, 1, 7, default, popin 80%
-      animation = border, 1, 7, default
-      animation = fade, 1, 7, default
-      animation = workspaces, 1, 7, default
-    }
+      bezier = wind, 0.05, 0.9, 0.1, 1.05
+      bezier = winIn, 0.1, 1.1, 0.1, 1.1
+      bezier = winOut, 0.3, -0.3, 0, 1
+      bezier = liner, 1, 1, 1, 1
+      animation = windows, 1, 6, wind, slide
+      animation = windowsIn, 1, 6, winIn, slide
+      animation = windowsOut, 1, 5, winOut, slide
+      animation = windowsMove, 1, 5, wind, slide
+      animation = border, 1, 1, liner
+      animation = borderangle, 1, 30, liner, loop
+      animation = fade, 1, 10, default
+      animation = workspaces, 1, 5, wind
+  }
 
     # <===== BINDINGS ====>
 
@@ -269,35 +271,39 @@
     bind   = $mod        , W     , exec           , firefox
     bind   = $mod        , D     , exec           , rofi -show drun
     bind   = $mod SHIFT  , D     , exec           , rofi -show run
-    bind   = $mod        , L     , exec           , $lockscreen
+    bind   = $mod        , L     , exec           , swaylock
+    bind   = $mod_SHIFT  , S     , exec           , grim -g "$(slurp)" - | swappy -f -
 
     # Hyprland Relative Workspace
     bind   = $mod        , LEFT  , exec           , hyprland-relative-workspace b
     bind   = $mod        , RIGHT , exec           , hyprland-relative-workspace f
-    bind   = $mod SHIFT  , LEFT  , exec           , hyprland-relative-workspace b --with-window
-    bind   = $mod SHIFT  , RIGHT , exec           , hyprland-relative-workspace f --with-window
+    bind = $mod_SHIFT, left, workspace, -1
+    bind = $mod_SHIFT, right, workspace, +1
 
     $xdg = $HOME/.config
     $scripts = $xdg/home-manager/scripts
     $lockscreen = $scripts/lockscreen
     $screenshot = $scripts/screenshot
 
+    exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+    exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
     exec-once = waybar --config $xdg/waybar/config.jsonc
     exec-once = waybar --config $xdg/waybar/window-title.jsonc
     exec-once = nm-applet
 
     exec-once = sh $scripts/xdg
+    exec-once = handle_monitor_connect.sh
 
     exec-once = wl-paste --type text --watch cliphist store
     exec-once = wl-paste --type image --watch cliphist store
 
-    exec-once = swayidle -w timeout 1200 '$lockscreen' timeout 1200 'hyprctl dispatch dpms off'
-    exec-once = swww-daemon
-    exec-once = bash $xdg/swww/swwwallpaper.sh -n
-    exec-once = swaync
+    exec-once = $xdg/swww/swwwallpaper.sh # start wallpaper daemon
     exec-once = gammastep
-
-    exec-once = tuxedo-control-center
+    exec-once = rm -rf $HOME/.config/Slack && slack
+    exec-once = chromium
+    exec-once = discord
+    exec-once = spotify
 
     $dropterm = ^(gophrland-alacritty)$
     windowrule = float,$dropterm
@@ -310,6 +316,17 @@
     windowrule = workspace special:scratchpads_special_workspace silent,$pulsemixer
     windowrule = size 75% 60%,$pulsemixer
     windowrulev2 = dimaround,class:$pulsemixer
+    windowrulev2 = workspace 4, class:^(chromium-browser)$
+    windowrulev2 = workspace 5, class:^(Slack)$
+    windowrulev2 = workspace 6, class:^(discord)$
+    windowrulev2 = workspace 7, title:^(Spotify)$
+    workspace = 1, monitor:DP-2
+    workspace = 2, monitor:DP-2
+    workspace = 3, monitor:DP-2
+    workspace = 4, monitor:DP-3
+    workspace = 5, monitor:DP-3
+    workspace = 6, monitor:DP-3
+    workspace = 7, monitor:DP-3
   '';
 
   # Let Home Manager install and manage itself.

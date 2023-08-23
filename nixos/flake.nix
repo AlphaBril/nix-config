@@ -8,7 +8,9 @@
     system = "x86_64-linux";
   in {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      modules = [ ./configuration.nix ];
+      modules = [
+        ./configuration.nix
+      ];
     };
   };
 }

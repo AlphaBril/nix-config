@@ -1,5 +1,5 @@
 {
-  description = "Home Manager configuration of alphabril";
+  description = "Home Manager configuration of edjubert";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -13,7 +13,7 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, hyprland, gophrland, ... } @ inputs:
+  outputs = { nixpkgs, home-manager, hyprland, ... } @ inputs:
     let
       system = "x86_64-linux";
       pkgs = inputs.nixpkgs.legacyPackages.${system};
@@ -27,14 +27,8 @@
           {
             wayland.windowManager.hyprland = {
               enable = true;
-              nvidiaPatches = true;
               xwayland.enable = true;
             };
-          }
-          {
-            home.packages = [
-              gophrland.packages.${system}.default
-            ];
           }
         ];
       };

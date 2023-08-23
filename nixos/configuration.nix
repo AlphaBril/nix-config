@@ -23,9 +23,6 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-hyprland
-    ];
   };
 
   # virtualisation.virtualbox.host = {
@@ -55,21 +52,6 @@
 	TimeoutStopsec = 10;
       };
     };
-    xdg-desktop-portal-for-hyprland = {
-      description = "xdg-desktop-portal-for-hyprland";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      # after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        ExecStart = "/home/alphabril/.config/home-manager/scripts/xdg-portal start";
-	ExecStop = "/home/alphabril/.config/home-manager/scripts/xdg-portal stop";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
-
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -100,7 +82,7 @@
   programs.hyprland.enable = true;
   programs.light.enable = true;
 
-  # services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
 
   nixpkgs.config.permittedInsecurePackages = [
     "openssl-1.1.1v"
@@ -113,14 +95,51 @@
     package = pkgs.usbmuxd2;
   };
 
+  services.xserver = {
+    displayManager.gdm = {
+      enable = true;
+      wayland = true;
+    };
+    desktopManager.gnome.enable = true;
+
+    enable = true;
+    layout = "us";
+    xkbOptions = "colemak,caps:escape";
+    videoDrivers = ["nvidia"];
+  };
+
+  environment.variables = {
+    GBM_BACKEND = "nvidia-drm";
+    LIBVA_DRIVER_NAME = "nvidia";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
+
   hardware = {
-    nvidia.modesetting.enable = true;
-    nvidia.powerManagement.enable = true;
+    nvidia = {
+      open = false;
+      powerManagement.enable = false;
+      modesetting.enable = true;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+    };
+    opengl.extraPackages = with pkgs; [nvidia-vaapi-driver];
+  };
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
   };
 
   sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  security.pam.services.swaylock.text = ''
+    auth include login
+  '';
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -149,6 +168,14 @@
     EGL_PLATFORM = "wayland";
     GST_VAAPI_ALL_DRIVERS = "1";
   };
+
+  environment.systemPackages = with pkgs; [
+    vim
+    git
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-tools
+  ];
 
   environment.gnome.excludePackages = (with pkgs; [
     gnome-photos
