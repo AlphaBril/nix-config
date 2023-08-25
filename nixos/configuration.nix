@@ -80,6 +80,7 @@
 
   programs.fish.enable = true;
   programs.hyprland.enable = true;
+  programs.hyprland.xwayland.enable = true;
   programs.light.enable = true;
 
   services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
@@ -122,7 +123,11 @@
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
-    opengl.extraPackages = with pkgs; [nvidia-vaapi-driver];
+    opengl.extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
@@ -150,7 +155,7 @@
   users.users.alphabril = {
     isNormalUser = true;
     description = "AlphaBril";
-    extraGroups = [ "networkmanager" "wheel" "video" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "docker" "render" ];
     shell = pkgs.fish;
   };
 

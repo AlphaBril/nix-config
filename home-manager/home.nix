@@ -22,6 +22,9 @@
   };
 
   home.packages = with pkgs; [
+    postman
+    awscli
+    openssl
     spotify
     vscode
     slack
@@ -286,7 +289,7 @@
     $screenshot = $scripts/screenshot
 
     exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-    exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+    exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
     exec-once = waybar --config $xdg/waybar/config.jsonc
     exec-once = waybar --config $xdg/waybar/window-title.jsonc
@@ -300,7 +303,7 @@
 
     exec-once = $xdg/swww/swwwallpaper.sh # start wallpaper daemon
     exec-once = gammastep
-    exec-once = rm -rf $HOME/.config/Slack && slack
+    exec-once = slack --disable-gpu
     exec-once = chromium
     exec-once = discord
     exec-once = spotify
