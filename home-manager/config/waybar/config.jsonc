@@ -17,11 +17,7 @@
     "custom/notification"
   ],
   "modules-right": [
-    "custom/whatsdesk",
-    "custom/slack",
-    "custom/updates",
     "network",
-    "tray",
     "clock"
   ],
   "custom/layout": {
@@ -88,11 +84,11 @@
       "1": "1",
       "2": "2",
       "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7",
-      "8": "8",
+      "4": "<span font='Font Awesome 5 Free 11'></span>",
+      "5": "<span font='Font Awesome 5 Free 11'>󰒱</span>",
+      "6": "<span font='Font Awesome 5 Free 11'>󰙯</span>",
+      "7": "<span font='Font Awesome 5 Free 11'></span>",
+      "8": "<span font='Font Awesome 5 Free 11'>󰖣</span>",
       "9": "9",
       "11": "1",
       "12": "2",
@@ -117,14 +113,6 @@
   // left modules //
   "clock": {
     "format": "{:%H:%M}"
-  },
-  // right modules //
-  "custom/updates": {
-    "format": "󰮯 {}",
-    "exec": "~/.config/waybar/scripts/update-sys.sh",
-    "on-click": "~/.config/waybar/scripts/update-sys.sh update",
-    "interval": 86400, // once every day
-    "tooltip": true
   },
   "battery": {
     "bat": "BAT0",
@@ -166,13 +154,19 @@
   },
   "custom/slack": {
     "format": "<span font='Font Awesome 5 Free 11'>󰒱</span>",
-    "on-click": "gophrland scratchpads toggle slack",
+    "on-click": "hyprctl dispatch focuswindow Slack",
     "interval": 86400, // once every day
     "tooltip": true
   },
   "custom/whatsdesk": {
     "format": "<span font='Font Awesome 5 Free 11'>󰖣</span>",
-    "on-click": "gophrland scratchpads toggle whatsdesk",
+    "on-click": "hyprctl dispatch focuswindow whatsapp-for-linux",
+    "interval": 86400, // once every day
+    "tooltip": true
+  },
+  "custom/discord": {
+    "format": "<span font='Font Awesome 5 Free 11'></span>",
+    "on-click": "hyprctl dispatch focuswindow discord",
     "interval": 86400, // once every day
     "tooltip": true
   },

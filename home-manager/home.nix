@@ -303,10 +303,11 @@
 
     exec-once = $xdg/swww/swwwallpaper.sh # start wallpaper daemon
     exec-once = gammastep
-    exec-once = slack --disable-gpu
+    exec-once = slack
     exec-once = chromium
     exec-once = discord
     exec-once = spotify
+    exec-once = whatsapp-for-linux
 
     $dropterm = ^(gophrland-alacritty)$
     windowrule = float,$dropterm
@@ -323,6 +324,7 @@
     windowrulev2 = workspace 5, class:^(Slack)$
     windowrulev2 = workspace 6, class:^(discord)$
     windowrulev2 = workspace 7, title:^(Spotify)$
+    windowrulev2 = workspace 8, class:^(whatsapp-for-linux)
     workspace = 1, monitor:DP-2
     workspace = 2, monitor:DP-2
     workspace = 3, monitor:DP-2
@@ -330,6 +332,7 @@
     workspace = 5, monitor:DP-1
     workspace = 6, monitor:DP-1
     workspace = 7, monitor:DP-1
+    workspace = 8, monitor:DP-1
   '';
 
   # Let Home Manager install and manage itself.
