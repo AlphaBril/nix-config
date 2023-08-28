@@ -89,7 +89,7 @@
   },
   "pulseaudio#microphone": {
     "format": "{format_source}",
-    "format-source": " {volume}%",
+    "format-source": " {volume}%",
     "format-source-muted": "",
     // "on-click": "alacritty -T floating -o window.padding.x=10 -o window.padding.y=10 -e pulsemixer",
     "on-click": "pavucontrol -t 4",
