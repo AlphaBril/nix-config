@@ -120,7 +120,7 @@
     shell = pkgs.fish;
   };
 
-  services.xserver.displayManager.autoLogin.enable = false;
+  services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "alphabril";
 
   nixpkgs.config.allowUnfree = true;

@@ -117,7 +117,7 @@
     # <==== MONITORS ====>
 
     monitor=DP-2,2560x1440@60Hz,0x0,1
-    monitor=DP-1,1680x1050@60Hz,2560x0,1
+    monitor=DP-1,1680x1050@60Hz,2560x390,1
     monitor=HDMI-A-1, 2560x1440@60Hz,4240x0,1
 
     # <==== GENERAL ====>
@@ -296,10 +296,7 @@
     exec-once = nm-applet
 
     exec-once = sh $scripts/xdg
-    exec-once = handle_monitor_connect.sh
-
-    exec-once = wl-paste --type text --watch cliphist store
-    exec-once = wl-paste --type image --watch cliphist store
+    exec-once = $scripts/handle_monitor_connect
 
     exec-once = $xdg/swww/swwwallpaper.sh # start wallpaper daemon
     exec-once = gammastep
@@ -307,7 +304,6 @@
     exec-once = chromium
     exec-once = discord
     exec-once = spotify
-    exec-once = whatsapp-for-linux
 
     $dropterm = ^(gophrland-alacritty)$
     windowrule = float,$dropterm
