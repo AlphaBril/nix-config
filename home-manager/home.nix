@@ -24,10 +24,14 @@
   home.packages = with pkgs; [
     postman
     awscli
+    xfce.thunar
     openssl
+    gimp
+    libreoffice-qt
     spotify
     vscode
     slack
+    jetbrains.datagrip
     discord
     chromium
     dunst

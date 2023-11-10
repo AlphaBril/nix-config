@@ -92,12 +92,26 @@
   environment.variables = {
     GBM_BACKEND = "nvidia-drm";
     LIBVA_DRIVER_NAME = "nvidia";
+    VDPAU_DRIVER = "va_gl";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
 
   hardware = {
     opengl.enable = true;
+    opengl.extraPackages = [ pkgs.libvdpau-va-gl ];
     nvidia.modesetting.enable = true;
+  };
+
+  systemd.services.handleKVM = {
+    enable = true;
+    description = "manage script that will handle monitor changes in hyprland";
+    after = ["network.target"];
+    wantedBy = ["multi-user.target"];
+    serviceConfig = {
+    ExecStart = "/home/alphabril/.config/home-manager/scripts/handle_monitor_connect.sh";
+    Restart = "always";
+    RestartSec = 1;
+    };
   };
 
   sound.enable = true;
@@ -129,11 +143,17 @@
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
   };
+  environment.etc.hosts.mode = "0644";
 
   environment.systemPackages = with pkgs; [
     vim
     git
   ];
+
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   environment.gnome.excludePackages = (with pkgs; [
     gnome-photos
