@@ -22,18 +22,19 @@
   };
 
   home.packages = with pkgs; [
-    postman
+    (pkgs.writeScriptBin "chromium-gpu" ''
+      LD_LIBRARY_PATH="${lib.makeLibraryPath [pkgs.libGL]}:$LD_LIBRARY_PATH" ${pkgs.chromium}/bin/chromium --enable-features=UseOzonePlatform --ozone-platform=x11 $@
+    '')
+    signal-desktop
     awscli
     xfce.thunar
     openssl
     gimp
     libreoffice-qt
     spotify
-    vscode
     slack
     jetbrains.datagrip
     discord
-    chromium
     dunst
     rofi
     swww
@@ -100,9 +101,22 @@
     });
   };
 
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.overrideAttrs (oldAttrs: {
+        preFixup = oldAttrs.preFixup + ''
+          gappsWrapperArgs+=(
+            --add-flags "--enable-features=UseOzonePlatform"
+            --add-flags "--ozone-platform=x11"
+          )
+        ''; # change to wayland when got time
+    });
+  };
+
   home.sessionVariables = {
     EDITOR = "code";
     TERMINAL = "alacritty";
+    DEFAULT_BROWSER = "chromium-gpu";
   };
 
   wayland.windowManager.hyprland.extraConfig = ''
@@ -121,7 +135,7 @@
     # <==== MONITORS ====>
 
     monitor=DP-2,2560x1440@60Hz,0x0,1
-    monitor=DP-1,1680x1050@60Hz,2560x390,1
+    monitor=DP-3,1680x1050@60Hz,2560x390,1
     monitor=HDMI-A-1, 2560x1440@60Hz,4240x0,1
 
     # <==== GENERAL ====>
@@ -159,7 +173,6 @@
     decoration {
       # See https://wiki.hyprland.org/Configuring/Variables/ for more
       rounding = 10
-      multisample_edges = true
       drop_shadow = false
       shadow_range = 0
       shadow_render_power = 0
@@ -304,10 +317,10 @@
 
     exec-once = $xdg/swww/swwwallpaper.sh # start wallpaper daemon
     exec-once = gammastep
-    exec-once = slack
-    exec-once = chromium
-    exec-once = discord
+    exec-once = slack --disable-gpu
+    exec-once = chromium-gpu
     exec-once = spotify
+    exec-once = signal-desktop
 
     $dropterm = ^(gophrland-alacritty)$
     windowrule = float,$dropterm
@@ -320,19 +333,18 @@
     windowrule = workspace special:scratchpads_special_workspace silent,$pulsemixer
     windowrule = size 75% 60%,$pulsemixer
     windowrulev2 = dimaround,class:$pulsemixer
-    windowrulev2 = workspace 4, class:^(chromium-browser)$
+    windowrulev2 = workspace 4, class:^(Chromium-browser)$
     windowrulev2 = workspace 5, class:^(Slack)$
-    windowrulev2 = workspace 6, class:^(discord)$
-    windowrulev2 = workspace 7, title:^(Spotify)$
-    windowrulev2 = workspace 8, class:^(whatsapp-for-linux)
+    windowrulev2 = workspace 6, title:^(Spotify)$
+    windowrulev2 = workspace 7, title:^(Signal)
     workspace = 1, monitor:DP-2
     workspace = 2, monitor:DP-2
     workspace = 3, monitor:DP-2
-    workspace = 4, monitor:DP-1
-    workspace = 5, monitor:DP-1
-    workspace = 6, monitor:DP-1
-    workspace = 7, monitor:DP-1
-    workspace = 8, monitor:DP-1
+    workspace = 4, monitor:DP-3
+    workspace = 5, monitor:DP-3
+    workspace = 6, monitor:DP-3
+    workspace = 7, monitor:DP-3
+    workspace = 8, monitor:DP-3
   '';
 
   # Let Home Manager install and manage itself.
