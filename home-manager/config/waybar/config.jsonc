@@ -13,7 +13,7 @@
     "hyprland/window"
   ],
   "modules-center": [
-    "wlr/workspaces",
+    "hyprland/workspaces",
     "custom/notification"
   ],
   "modules-right": [
@@ -74,7 +74,7 @@
     }
   },
   // center modules //
-  "wlr/workspaces": {
+  "hyprland/workspaces": {
     "disable-scroll": true,
     "all-outputs": false,
     "on-click": "activate",
@@ -86,28 +86,9 @@
       "3": "3",
       "4": "<span font='Font Awesome 5 Free 11'></span>",
       "5": "<span font='Font Awesome 5 Free 11'>󰒱</span>",
-      "6": "<span font='Font Awesome 5 Free 11'>󰙯</span>",
-      "7": "<span font='Font Awesome 5 Free 11'></span>",
-      "8": "<span font='Font Awesome 5 Free 11'>󰖣</span>",
-      "9": "9",
-      "11": "1",
-      "12": "2",
-      "13": "3",
-      "14": "4",
-      "15": "5",
-      "16": "6",
-      "17": "7",
-      "18": "8",
-      "19": "9",
-      "21": "1",
-      "22": "2",
-      "23": "3",
-      "24": "4",
-      "25": "5",
-      "26": "6",
-      "27": "7",
-      "28": "8",
-      "29": "9"
+      "6": "<span font='Font Awesome 5 Free 11'></span>",
+      "7": "<span font='Font Awesome 5 Free 11'></span>",
+      "8": "<span font='Font Awesome 5 Free 11'>󰙯</span>",
     }
   },
   // left modules //
