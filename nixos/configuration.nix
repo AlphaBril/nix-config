@@ -69,23 +69,13 @@
   };
   programs.light.enable = true;
 
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1v"
-    "nodejs-14.21.3"
-    "electron-13.6.9"
-  ];
-
-  services.usbmuxd = {
-    enable = true;
-    package = pkgs.usbmuxd2;
-  };
-
   services.xserver = {
     displayManager.gdm = {
       enable = true;
       wayland = true;
     };
     enable = true;
+    videoDrivers = ["nvidia"];
     layout = "us";
   };
 
@@ -96,22 +86,27 @@
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
   };
 
-  hardware = {
-    opengl.enable = true;
-    opengl.extraPackages = [ pkgs.libvdpau-va-gl ];
-    nvidia.modesetting.enable = true;
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    extraPackages = with pkgs; [
+      mesa_drivers
+      intel-ocl
+      beignet
+      vaapiIntel
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
   };
 
-  systemd.services.handleKVM = {
-    enable = true;
-    description = "manage script that will handle monitor changes in hyprland";
-    after = ["network.target"];
-    wantedBy = ["multi-user.target"];
-    serviceConfig = {
-    ExecStart = "/home/alphabril/.config/home-manager/scripts/handle_monitor_connect.sh";
-    Restart = "always";
-    RestartSec = 1;
-    };
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = false;
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   sound.enable = true;
@@ -154,22 +149,6 @@
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
-
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-photos
-    gnome-tour
-  ]) ++ (with pkgs.gnome; [
-    cheese
-    gnome-music
-    gedit
-    epiphany
-    geary
-    totem
-    tali
-    iagno
-    hitori
-    atomix
-  ]);
 
   nix.gc = {
     automatic = true;
