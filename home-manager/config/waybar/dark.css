@@ -34,6 +34,7 @@ tooltip {
     transition: all 0.5s cubic-bezier(.55,-0.68,.48,1.682);
 }
 
+
 #workspaces button.active {
     background: #a6adc8;
     color: #313244;
@@ -72,6 +73,7 @@ tooltip {
 #custom-wallchange,
 #custom-slack,
 #custom-whatsdesk,
+#custom-discord,
 #custom-waybar-mpris,
 #custom-mode,
 #tray {
@@ -161,7 +163,7 @@ tooltip {
 
 
 /* control center block */
-#custom-updates {
+#custom-discord {
     border-radius: 10px 0px 0px 10px;
     margin-left: 6px;
     padding-left: 12px;

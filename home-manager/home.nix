@@ -22,11 +22,17 @@
   };
 
   home.packages = with pkgs; [
-    spotify
-    vscode
-    slack
-    discord
     chromium
+    signal-desktop
+    awscli
+    xfce.thunar
+    openssl
+    gimp
+    libreoffice-qt
+    spotify
+    slack
+    jetbrains.datagrip
+    discord
     dunst
     rofi
     swww
@@ -93,9 +99,22 @@
     });
   };
 
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.overrideAttrs (oldAttrs: {
+        preFixup = oldAttrs.preFixup + ''
+          gappsWrapperArgs+=(
+            --add-flags "--enable-features=UseOzonePlatform"
+            --add-flags "--ozone-platform=x11"
+          )
+        ''; # change to wayland when got time
+    });
+  };
+
   home.sessionVariables = {
     EDITOR = "code";
     TERMINAL = "alacritty";
+    DEFAULT_BROWSER = "chromium-gpu";
   };
 
   wayland.windowManager.hyprland.extraConfig = ''
@@ -110,8 +129,6 @@
     env = XDG_SESSION_DESKTOP,Hyprland
     env = XDG_CURRENT_DESKTOP,Hyprland
     env = XDG_SESSION_TYPE,wayland,x11
-
-    # <==== MONITORS ====>
 
     # <==== GENERAL ====>
 
@@ -148,7 +165,6 @@
     decoration {
       # See https://wiki.hyprland.org/Configuring/Variables/ for more
       rounding = 10
-      multisample_edges = true
       drop_shadow = false
       shadow_range = 0
       shadow_render_power = 0
@@ -282,24 +298,20 @@
     $screenshot = $scripts/screenshot
 
     exec-once = dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
-    exec-once=systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+    exec-once = systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
     exec-once = waybar --config $xdg/waybar/config.jsonc
     exec-once = waybar --config $xdg/waybar/window-title.jsonc
     exec-once = nm-applet
 
     exec-once = sh $scripts/xdg
-    exec-once = handle_monitor_connect.sh
-
-    exec-once = wl-paste --type text --watch cliphist store
-    exec-once = wl-paste --type image --watch cliphist store
 
     exec-once = $xdg/swww/swwwallpaper.sh # start wallpaper daemon
     exec-once = gammastep
-    exec-once = rm -rf $HOME/.config/Slack && slack
+    exec-once = slack
     exec-once = chromium
-    exec-once = discord
     exec-once = spotify
+    exec-once = signal-desktop
 
     $dropterm = ^(gophrland-alacritty)$
     windowrule = float,$dropterm
@@ -314,8 +326,8 @@
     windowrulev2 = dimaround,class:$pulsemixer
     windowrulev2 = workspace 4, class:^(chromium-browser)$
     windowrulev2 = workspace 5, class:^(Slack)$
-    windowrulev2 = workspace 6, class:^(discord)$
-    windowrulev2 = workspace 7, title:^(Spotify)$
+    windowrulev2 = workspace 6, title:^(Spotify Premium)$
+    windowrulev2 = workspace 7, title:^(Signal)
   '';
 
   # Let Home Manager install and manage itself.

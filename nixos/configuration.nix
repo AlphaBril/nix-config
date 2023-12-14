@@ -21,9 +21,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.plymouth.enable = true;
 
-  xdg.portal = {
-    enable = true;
-  };
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   # virtualisation.virtualbox.host = {
   #   enable = true;
@@ -35,22 +34,6 @@
     rootless = {
       enable = true;
       setSocketVariable = true;
-    };
-  };
-
-  systemd.user.services = {
-    polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-	ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-	Restart = "on-failure";
-	RestartSec = 1;
-	TimeoutStopsec = 10;
-      };
     };
   };
 
@@ -79,38 +62,27 @@
   # xdg.portal.enable = true;
 
   programs.fish.enable = true;
-  programs.hyprland.enable = true;
-  programs.light.enable = true;
-
-  services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "openssl-1.1.1v"
-    "nodejs-14.21.3"
-    "electron-13.6.9"
-  ];
-
-  services.usbmuxd = {
+  programs.hyprland = {
     enable = true;
-    package = pkgs.usbmuxd2;
+    xwayland.enable = true;
   };
+  programs.light.enable = true;
 
   services.xserver = {
     displayManager.gdm = {
       enable = true;
       wayland = true;
     };
-    desktopManager.gnome.enable = true;
-
     enable = true;
     layout = "us";
-    xkbOptions = "colemak,caps:escape";
+  };
+
+  environment.variables = {
+    VDPAU_DRIVER = "va_gl";
   };
 
   hardware.opengl = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
   };
 
   sound.enable = true;
@@ -129,7 +101,7 @@
   users.users.alphabril = {
     isNormalUser = true;
     description = "AlphaBril";
-    extraGroups = [ "networkmanager" "wheel" "video" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     shell = pkgs.fish;
   };
 
@@ -138,34 +110,18 @@
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
-    MUTTER_ALLOW_HYBRID_GPUS = "1";
-    MOZ_ENABLE_WAYLAND = "1";
-    MOZ_WEBRENDER = "1";
-    MOZ_DISABLE_RDD_SANDBOX = "1";
-    EGL_PLATFORM = "wayland";
-    GST_VAAPI_ALL_DRIVERS = "1";
   };
+  environment.etc.hosts.mode = "0644";
 
   environment.systemPackages = with pkgs; [
     vim
     git
   ];
 
-  environment.gnome.excludePackages = (with pkgs; [
-    gnome-photos
-    gnome-tour
-  ]) ++ (with pkgs.gnome; [
-    cheese
-    gnome-music
-    gedit
-    epiphany
-    geary
-    totem
-    tali
-    iagno
-    hitori
-    atomix
-  ]);
+  systemd.targets.sleep.enable = false;
+  systemd.targets.suspend.enable = false;
+  systemd.targets.hibernate.enable = false;
+  systemd.targets.hybrid-sleep.enable = false;
 
   nix.gc = {
     automatic = true;
