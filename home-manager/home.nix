@@ -22,6 +22,7 @@
   };
 
   home.packages = with pkgs; [
+    gtk-engine-murrine
     chromium
     signal-desktop
     awscli
@@ -83,6 +84,15 @@
     userEmail = "florian.marie.doucet@gmail.com";
   };
 
+  #gtk = {
+  #  enable = true;
+  #  theme.package = null;
+  #  theme.name = "Everforest";
+  #  iconTheme.package = null;
+  #  iconTheme.name = "Everforest";
+  #};
+  #xdg.systemDirs.data = [ "/home/alphabril/.local/share" ];
+
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
@@ -114,7 +124,6 @@
   home.sessionVariables = {
     EDITOR = "code";
     TERMINAL = "alacritty";
-    DEFAULT_BROWSER = "chromium-gpu";
   };
 
   wayland.windowManager.hyprland.extraConfig = ''
