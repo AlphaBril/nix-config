@@ -1,9 +1,7 @@
 #!/bin/sh
 
-hyprctl dispatch moveworkspacetomonitor "1 DP-2"
-hyprctl dispatch moveworkspacetomonitor "2 DP-2"
-hyprctl dispatch moveworkspacetomonitor "3 DP-2"
-hyprctl dispatch moveworkspacetomonitor "4 DP-1"
-hyprctl dispatch moveworkspacetomonitor "5 DP-1"
-hyprctl dispatch moveworkspacetomonitor "6 DP-1"
-hyprctl dispatch moveworkspacetomonitor "7 DP-1"
+hyprctl dispatch moveworkspacetomonitor "1 AOC Q3279WG5B 0x000056B7"
+hyprctl dispatch moveworkspacetomonitor "2 AOC Q3279WG5B 0x000056B7"
+hyprctl dispatch moveworkspacetomonitor "3 AOC Q3279WG5B 0x000056B7"
+hyprctl dispatch moveworkspacetomonitor "4 Samsung Electric Company LF24T450F HK7W905180"
+hyprctl dispatch moveworkspacetomonitor "5 Samsung Electric Company LF24T450F HK7W905180"

@@ -62,6 +62,7 @@
   # xdg.portal.enable = true;
 
   programs.fish.enable = true;
+  programs.ssh.startAgent = true;
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
@@ -76,6 +77,8 @@
     enable = true;
     layout = "us";
   };
+  services.gvfs.enable = true ;
+  services.udisks2.enable = true ;
 
   environment.variables = {
     VDPAU_DRIVER = "va_gl";
@@ -87,7 +90,10 @@
 
   sound.enable = true;
   hardware.pulseaudio.enable = false;
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
   security.rtkit.enable = true;
+  security.polkit.enable = true;
   security.pam.services.swaylock.text = ''
     auth include login
   '';
@@ -108,7 +114,6 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.sessionVariables = {
-    WLR_NO_HARDWARE_CURSORS = "1";
     NIXOS_OZONE_WL = "1";
   };
   environment.etc.hosts.mode = "0644";
@@ -122,6 +127,21 @@
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
+  systemd = {
+  user.services.polkit-gnome-authentication-agent-1 = {
+    description = "polkit-gnome-authentication-agent-1";
+    wantedBy = [ "graphical-session.target" ];
+    wants = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+  };
+};
 
   nix.gc = {
     automatic = true;
@@ -131,6 +151,6 @@
 
   system.autoUpgrade.enable = true;
 
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 }
 
